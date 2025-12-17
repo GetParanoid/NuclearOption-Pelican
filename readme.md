@@ -103,5 +103,5 @@ ___
 3. After workshop content downloads successfully, consider setting `WORKSHOP_AUTO_UPDATE` to `0` to skip workshop sync on subsequent boots and avoid repeated auth prompts.
 
 > [!CAUTION]
-> Known Issues
+### Known Issues
 - Sometimes the initial install fails, simply initiate a reinstall from either the admin panel, or the game-server's panel.
