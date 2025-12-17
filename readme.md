@@ -107,6 +107,9 @@ ___
 ### Known Issues
 - Sometimes the initial install fails, simply initiate a reinstall from either the admin panel, or the game-server's panel.
 
->[!TIP]
-> To-do list & Upcoming Features
-- [ ] [Add integration with Nuclear Option Server Control Panel](https://github.com/GetParanoid/NuclearOption-Pelican/issues/1)
+___
+
+### Roadmap & Future Enhancements
+
+
+- [ ] [Integrate with Nuclear Option Server Control Panel](https://github.com/GetParanoid/NuclearOption-Pelican/issues/1) - Enable advanced server management through the official control panel
