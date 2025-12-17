@@ -1,1 +1,176 @@
-{}
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-12-16T00:00:00+00:00",
+    "name": "Nuclear Option",
+    "author": "GetParanoid | gp@getparanoid.net",
+    "uuid": "0d7e2c6b-9a1a-4c41-9d9c-0a9c1f6f2c0f",
+    "description": "Dedicated server egg for Nuclear Option. Installs via SteamCMD and runs with a configurable DedicatedServerConfig.json.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io/parkervcp/steamcmd:debian": "ghcr.io/parkervcp/steamcmd:debian"
+    },
+    "file_denylist": [],
+    "startup": "./start.sh",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"DedicatedServerKeyValues\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\nset -euo pipefail\n\nPLATFORM=linux\nFORCE_PLATFORM=\"+@sSteamCmdForcePlatformType ${PLATFORM}\"\n\necho \"Using SteamCMD platform: ${PLATFORM}\"\n\n## install with anonymous SteamCMD login\n\n## download and install steamcmd\ncd /tmp\nmkdir -p /mnt/server/steamcmd\ncurl -sSL -o steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz\ntar -xzvf steamcmd.tar.gz -C /mnt/server/steamcmd\nmkdir -p /mnt/server/steamapps\ncd /mnt/server/steamcmd\n\n# SteamCMD sometimes fails without this.\nchown -R root:root /mnt\nexport HOME=/mnt/server\n\n## install game using steamcmd\n./steamcmd.sh ${FORCE_PLATFORM} +force_install_dir /mnt/server +login anonymous +app_update ${SRCDS_APPID} $( [[ -n ${SRCDS_BETAID} ]] && printf %s \"-beta ${SRCDS_BETAID}\" ) $( [[ -n ${SRCDS_BETAPASS} ]] && printf %s \"-betapassword ${SRCDS_BETAPASS}\" ) ${INSTALL_FLAGS} validate +quit\n\n## set up Steam libraries (required for Steamworks init)\nmkdir -p /mnt/server/.steam/sdk32\ncp -v linux32/steamclient.so ../.steam/sdk32/steamclient.so\nmkdir -p /mnt/server/.steam/sdk64\ncp -v linux64/steamclient.so ../.steam/sdk64/steamclient.so\n\n## fetch default DedicatedServerConfig.json\ncurl -fSL \"https://raw.githubusercontent.com/GetParanoid/NuclearOption-Pelican/refs/heads/main/DedicatedServerConfig.json\" -o /mnt/server/DedicatedServerConfig.json\n\n## fetch panel start script\ncurl -fSL \"https://raw.githubusercontent.com/GetParanoid/NuclearOption-Pelican/refs/heads/main/start.sh\" -o /mnt/server/start.sh\n\n## permissions\nmkdir -p /mnt/server/logs\nchmod +x /mnt/server/NuclearOptionServer.x86_64 || true\nchmod +x /mnt/server/RunServer.sh || true\nchmod +x /mnt/server/start.sh || true\n\n\necho \"-----------------------------------------\"\necho \"Installation completed...\"\necho \"Refresh Pelican & Start Server.\"\necho \"-----------------------------------------\"",
+            "container": "ghcr.io/parkervcp/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "App ID",
+            "description": "Steam app id for Nuclear Option (do not change).",
+            "env_variable": "SRCDS_APPID",
+            "default_value": "3930080",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string",
+            "sort": 1,
+            "field_type": "text"
+        },
+        {
+            "name": "Auto Update (Unused, leave off)",
+            "description": "Not Used. Leave Off.",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "0",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "boolean",
+            "sort": 2,
+            "field_type": "text"
+        },
+        {
+            "name": "Framerate Limit",
+            "description": "Passed to -limitframerate for the server process.",
+            "env_variable": "FRAMERATE",
+            "default_value": "30",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:1",
+            "sort": 3,
+            "field_type": "text"
+        },
+        {
+            "name": "Mission Directory",
+            "description": "Absolute path for mission/user content (used by start.sh workshop integration, not NuclearOptionServerConfig.json).",
+            "env_variable": "MISSION_DIR",
+            "default_value": "/home/container/missions (/missions/ inside the container)",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string",
+            "sort": 4,
+            "field_type": "text"
+        },
+        {
+            "name": "Workshop Collection ID",
+            "description": "Optional Steam Workshop collection ID to sync on start (requires STEAM_USER).",
+            "env_variable": "WORKSHOP_COLLECTION_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string",
+            "sort": 5,
+            "field_type": "text"
+        },
+        {
+            "name": "Beta Branch",
+            "description": "Optional Steam beta branch name (empty for live-current build).",
+            "env_variable": "SRCDS_BETAID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string",
+            "sort": 6,
+            "field_type": "text"
+        },
+        {
+            "name": "Beta Password",
+            "description": "Password for the beta branch if required.",
+            "env_variable": "SRCDS_BETAPASS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string",
+            "sort": 7,
+            "field_type": "text"
+        },
+        {
+            "name": "Install Flags",
+            "description": "Additional SteamCMD flags appended to app_update (optional).",
+            "env_variable": "INSTALL_FLAGS",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "string",
+            "sort": 8,
+            "field_type": "text"
+        },
+        {
+            "name": "Steam Username",
+            "description": "Optional Steam username; leave blank for anonymous. Required for workshop downloads.",
+            "env_variable": "STEAM_USER",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "string",
+            "sort": 9,
+            "field_type": "text"
+        },
+        {
+            "name": "Steam Password",
+            "description": "Optional Steam password when providing a Steam username.",
+            "env_variable": "STEAM_PASS",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "string",
+            "sort": 10,
+            "field_type": "password"
+        },
+        {
+            "name": "Steam Guard Code",
+            "description": "Optional one-time Steam Guard code. NOT recommended to set this permanently, use the Steam Mobile App to approve logins instead.",
+            "env_variable": "STEAM_AUTH",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "string",
+            "sort": 11,
+            "field_type": "text"
+        },
+        {
+            "name": "Steam Auto Update",
+            "description": "Updates Nuclear Option server files on boot. Set this to disabled to skip updating the game",
+            "env_variable": "STEAM_AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "sort": 12,
+            "field_type": "text"
+        },
+        {
+            "name": "Steam Workshop Update",
+            "description": "Downloads/Verifies/Updates workshop Content. Set this to disabled to skip the Steam login & interact with workshop content. Useful if you've already downloaded content and just want to run/restart the server.",
+            "env_variable": "WORKSHOP_AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "sort": 13,
+            "field_type": "text"
+        }
+    ]
+}
