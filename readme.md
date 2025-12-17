@@ -109,4 +109,4 @@ ___
 
 >[!TIP]
 > To-do list & Upcoming Features
-- [ ] #1
+- [ ] https://github.com/GetParanoid/NuclearOption-Pelican/issues/1
