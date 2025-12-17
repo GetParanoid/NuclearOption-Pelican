@@ -101,3 +101,7 @@ ___
 1. Enter a fresh Steam Guard code in the server's `Startup` section (`STEAM_AUTH` variable, NOT RECOMMENDED) OR be ready to approve the login via the Steam Mobile App (Recommeneded).
 2. Launch the server and watch the console for successful login messages from SteamCMD.
 3. After workshop content downloads successfully, consider setting `WORKSHOP_AUTO_UPDATE` to `0` to skip workshop sync on subsequent boots and avoid repeated auth prompts.
+
+> [!CAUTION]
+> Known Issues
+- Sometimes the initial install fails, simply initiate a reinstall from either the admin panel, or the game-server's panel.
