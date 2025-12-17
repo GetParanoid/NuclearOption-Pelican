@@ -109,4 +109,4 @@ ___
 
 >[!TIP]
 > To-do list & Upcoming Features
-- [ ] https://github.com/GetParanoid/NuclearOption-Pelican/issues/1
+- [ ] [Add integration with Nuclear Option Server Control Panel](https://github.com/GetParanoid/NuclearOption-Pelican/issues/1)
