@@ -66,7 +66,7 @@
             "name": "Mission Directory",
             "description": "Absolute path for mission/user content (used by start.sh workshop integration, not NuclearOptionServerConfig.json).",
             "env_variable": "MISSION_DIR",
-            "default_value": "/home/container/missions (/missions/ inside the container)",
+            "default_value": "/home/container/missions",
             "user_viewable": true,
             "user_editable": false,
             "rules": "required|string",
