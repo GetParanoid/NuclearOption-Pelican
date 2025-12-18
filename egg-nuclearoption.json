@@ -6,7 +6,7 @@
     },
     "exported_at": "2025-12-16T00:00:00+00:00",
     "name": "Nuclear Option",
-    "author": "GetParanoid | gp@getparanoid.net",
+    "author": "gp@getparanoid.net",
     "uuid": "0d7e2c6b-9a1a-4c41-9d9c-0a9c1f6f2c0f",
     "description": "Dedicated server egg for Nuclear Option. Installs via SteamCMD and runs with a configurable DedicatedServerConfig.json.",
     "features": null,
@@ -17,7 +17,7 @@
     "startup": "./start.sh",
     "config": {
         "files": "{}",
-        "startup": "{\r\n    \"done\": \"DedicatedServerKeyValues\"\r\n}",
+        "startup": "{\r\n    \"done\": \"Server finished loading\"\r\n}",
         "logs": "{}",
         "stop": "^C"
     },
